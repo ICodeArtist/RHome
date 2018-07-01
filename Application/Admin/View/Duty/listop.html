@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" style="margin-top: 100px;margin-left: 100px;">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/H-ui.min.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/lib/Hui-iconfont/1.0.8/iconfont.css" />
+<link rel="stylesheet" href="__PUBLIC__/admin/css/vstyle.css" media="screen" type="text/css" />
+</head>
+<body>
+<div class="cl pd-5 bg-1 mt-20">
+	<span class="l">
+		<a href="__URL__/gOutListVote/vid/{$voteid}" class="btn btn-primary radius">
+			<i class="Hui-iconfont">&#xe6ab;</i>
+			导出</a>
+	</span>
+</div>
+<volist name="vp" id="voinfo">
+	<h1>{$voinfo.title}</h1>
+	<volist name="voinfo['op']" id="cv">
+		<div class="skillbar clearfix " data-percent="{$cv.percent}%">
+
+			<div class="skillbar-title" style="background: {$cv.titlecolor};"><span>{$cv.opv}</span></div>
+
+			<div class="skillbar-bar" style="background: {$cv.barcolor};"></div>
+
+			<div class="skill-bar-percent">{$cv.percent}%</div>
+
+		</div> <!-- End Skill Bar -->
+	</volist>
+</volist>
+<footer class="footer mt-20">
+	<div class="container">
+		<p><br>
+			Copyright &copy;Since 2017 All Rights Reserved.<br>
+		</p>
+	</div>
+</footer>
+<script type="text/javascript" src='__PUBLIC__/lib/jquery/1.9.1/jquery.js'></script>
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+
+	$('.skillbar').each(function(){
+
+		$(this).find('.skillbar-bar').animate({
+
+			width:$(this).attr('data-percent')
+
+		},3000);
+
+	});
+
+});
+
+</script>
+
+
+
+</body>
+
+</html>

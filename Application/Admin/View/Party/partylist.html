@@ -1,0 +1,195 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<!--[if lt IE 9]>
+<script type="text/javascript" src="lib/html5shiv.js"></script>
+<script type="text/javascript" src="lib/respond.min.js"></script>
+<![endif]-->
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/H-ui.min.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/H-ui.admin.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/lib/Hui-iconfont/1.0.8/iconfont.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/skin/default/skin.css" id="skin" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/style.css" />
+<!--[if IE 6]>
+<script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+<style type="text/css">
+.page-container {padding-top: 0px;}
+#pic{position: absolute; display: none;}
+#pic1{ width: 400px; height: 300px; border-radius: 5px; -webkit-box-shadow: 5px 5px 5px 5px hsla(0,0%,5%,1.00); box-shadow: 5px 5px 5px 0px hsla(0,0%,5%,0.3); }
+.td-manage{font-size: 20px;}
+</style>
+<title></title>
+</head>
+<body>
+<nav class="breadcrumb">
+	<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" >
+		<i class="Hui-iconfont">&#xe68f;</i>
+	</a>
+</nav>
+<div class="page-container">
+	<div class="cl pd-5 bg-1 bk-gray mt-20">
+		<span class="l">
+			<a class="btn btn-primary radius" onclick="party_add('新增','partyadd.html')" href="javascript:;">
+				<i class="Hui-iconfont">&#xe600;</i>
+				新增</a>
+		</span>
+	</div>
+	<div class="mt-20">
+		<table class="table table-border table-bordered table-bg table-hover table-sort">
+			<thead>
+				<tr class="text-c">
+					<th width="5%">ID</th>
+					<th width="20%">组织名</th>
+					<th width="10%">书记</th>
+					<th width="10%">96345联系人</th>
+					<th width="10%">96345联系人电话</th>
+					<th width="25%">地址</th>
+					<th width="1%" style="display:none">简介</th>
+					<th width="1%" style="display:none">经度</th>
+					<th width="1%" style="display:none">纬度</th>
+					<th width="20%">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<foreach name="plist" item="cv">
+				<tr class="text-c">
+					<td id="orgid">{$cv.orgid}</td>
+					<td id="party">{$cv.party}</td>
+					<td id="secretary">{$cv.secretary}</td>
+					<td id="contact">{$cv.contact}</td>
+					<td id="telephone">{$cv.telephone}</td>
+					<td id="address">{$cv.address}</td>
+					<td id="description" style="display:none">{$cv.description}</td>
+					<td id="lng" style="display:none">{$cv.lng}</td>
+					<td id="lat" style="display:none">{$cv.lat}</td>
+					<td class="td-manage">
+						<a style="text-decoration:none" class="ml-5" onClick="party_edit('编辑','party_edit.html',this,'','510')" href="javascript:;" title="编辑">
+							<i class="Hui-iconfont">&#xe6df;</i>
+						</a>
+						<if condition="$cv.iflink eq '0'">
+							<a style="text-decoration:none" class="ml-5" onClick="party_del(this,'{$cv.orgid}')" href="javascript:;" title="删除">
+								<i class="Hui-iconfont">&#xe6e2;</i>
+							</a>
+						</if>
+					</td>
+				</tr>
+				</foreach>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="__PUBLIC__/lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="__PUBLIC__/static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__PUBLIC__/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="__PUBLIC__/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/lib/laypage/1.2/laypage.js"></script>
+<script type="text/javascript">
+$('.table-sort').dataTable({
+	"aaSorting": [[ 0, "desc" ]],//默认第几个排序
+	"bStateSave": true,//状态保存
+	"aoColumnDefs": [
+	  //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
+	  {"orderable":false,"aTargets":[1,2,3,4,5,6,7,8,9]}// 制定列不参与排序
+	]
+});
+function showHtml(title,url){
+	if (title == null || title == '') {
+		title=false;
+	};
+	if (url == null || url == '') {
+		url="404.html";
+	};
+}
+/*编辑*/
+function party_edit(title,url,obj,w,h){
+	showHtml(title,url);
+	if (h == null || h == '') {
+		h=($(window).height() - 50);
+	};
+	if (w == null || w == '') {
+		w=800;
+	};
+	var index = layer.open({
+		type: 2,
+		area: [w+'px', h +'px'],
+		fix: false, //不固定
+		maxmin: false,
+		shade:0.4,
+		title: title,
+		content: url,
+		success: function (layero, index) {
+			// var body = layer.getChildFrame('body',index);
+			var tr = $(obj).parents('tr:eq(0)');
+
+			var orgid = tr.children('#orgid').html();
+			$("#orgid", layero.find("iframe")[0].contentWindow.document).attr("value", orgid);
+
+			var party = tr.children('#party').html();
+			$("#party", layero.find("iframe")[0].contentWindow.document).attr("value",party);
+
+			var secretary = tr.children('#secretary').html();
+			$("#secretary", layero.find("iframe")[0].contentWindow.document).attr("value", secretary);
+
+			var contact = tr.children('#contact').html();
+			$("#contact", layero.find("iframe")[0].contentWindow.document).attr("value", contact);
+
+			var telephone = tr.children('#telephone').html();
+			$("#telephone", layero.find("iframe")[0].contentWindow.document).attr("value", telephone);
+
+			var address = tr.children('#address').html();
+			$("#address", layero.find("iframe")[0].contentWindow.document).attr("value", address);
+
+			var description = tr.children('#description').html();
+			$("#description", layero.find("iframe")[0].contentWindow.document).attr("value", description);
+
+			var lng = tr.children('#lng').html();
+			$("#lng", layero.find("iframe")[0].contentWindow.document).attr("value", lng);
+
+			var lat = tr.children('#lat').html();
+			$("#lat", layero.find("iframe")[0].contentWindow.document).attr("value", lat);
+		}
+	});
+	layer.full(index);
+}
+function party_add(title,url){
+	var index = layer.open({
+		type: 2,
+		title: title,
+		content: url
+	});
+	layer.full(index);
+}
+/*删除*/
+function party_del(obj,id){
+	layer.confirm('确认要删除吗？',function(index){
+		$.ajax({
+			type: 'POST',
+			url: 'delParty',
+			dataType: 'json',
+			data:{"orgid":id},
+			success: function(data){
+				$(obj).parents("tr").remove();
+				layer.msg('已删除!',{icon:1,time:1000});
+			},
+			error:function(data) {
+				alert(data.msg);
+			},
+		});
+	});
+}
+</script>
+</body>
+</html>

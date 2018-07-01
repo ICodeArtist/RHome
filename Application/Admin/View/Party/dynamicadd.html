@@ -1,0 +1,161 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<!--[if lt IE 9]>
+<script type="text/javascript" src="lib/html5shiv.js"></script>
+<script type="text/javascript" src="lib/respond.min.js"></script>
+<![endif]-->
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/H-ui.min.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/H-ui.admin.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/lib/Hui-iconfont/1.0.8/iconfont.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/skin/default/skin.css" id="skin" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/style.css" />
+<!--[if IE 6]>
+<script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+<title></title>
+</head>
+<body>
+<div class="page-container">
+	<form class="form form-horizontal" id="form-article-add" action="__URL__/addDynamic" enctype="multipart/form-data" method="post" onsubmit="return toVaild()" target="_parent">
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>动态标题：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="" id="title" name="title">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>发布人：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="越城区委组织部" placeholder="" id="author" name="author">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>内容：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<script id="editor" type="text/plain" name="content" style="width:1024px;height:500px;"></script>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>展示图片上传：</label>
+      <input type='file'  name='photo' style="padding-left: 15px;" id='photo'>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>级别选择:</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<select name="lev" id="changeLevnum">
+				</select>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">分类选择:</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<select name="type" id="changeLev">
+				</select>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">基层选择:</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<select name="orgid" id="changeP">
+				</select>
+			</div>
+		</div>
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+				<button class="btn btn-primary radius" type="submit" form="form-article-add"><i class="Hui-iconfont">&#xe632;</i> 提交</button>
+				<button onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+			</div>
+		</div>
+	</form>
+</div>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="__PUBLIC__/lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/admin/js/H-ui.admin.js"></script>
+<!--/_footer 作为公共模版分离出去-->
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__PUBLIC__/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+<!--百度编辑器-->
+<script type="text/javascript" charset="utf-8" src="__PUBLIC__/ueditor-php/ueditor.config.js?v1.1"></script>
+<script type="text/javascript" charset="utf-8" src="__PUBLIC__/ueditor-php/ueditor.all.min.js"> </script>
+<script type="text/javascript" charset="utf-8" src="__PUBLIC__/ueditor-php/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript">
+var ue = UE.getEditor('editor');//ueditor
+function toVaild(){
+   var title = document.getElementById("title").value;
+	 var photo = document.getElementById("photo").value;
+   if(title == ""){
+     alert("标题不能为空");
+     return false;
+   }
+	 if(photo == ""){
+     alert("图片不能为空");
+     return false;
+   }
+}
+//区级，镇级选择
+$(function(){
+	var html = [];
+	$.ajax({
+		type: 'POST',
+		url: '__MODULE__/Party/getLevNum',
+		dataType: 'json',
+		success: function(data){
+			html.push('<option value="">==级别选择==</option>');
+			for (var i = 0; i < data.length; i++) {
+				html.push('<option value="'+data[i].id+'">'+data[i].name+'</option>');
+			}
+			$('#changeLevnum').empty().append(html.join(''));
+		},
+		error:function(data) {
+			alert('error');
+		},
+	});
+});
+//分类选择
+$(function(){
+	var html = [];
+	$.ajax({
+		type: 'POST',
+		url: '__MODULE__/Party/getLev',
+		dataType: 'json',
+		success: function(data){
+			html.push('<option value="">==分类选择==</option>');
+			for (var i = 0; i < data.length; i++) {
+				html.push('<option value="'+data[i].id+'">'+data[i].name+'</option>');
+			}
+			$('#changeLev').empty().append(html.join(''));
+		},
+		error:function(data) {
+			alert('error');
+		},
+	});
+});
+$(function(){
+	var html = [];
+	$.ajax({
+		type: 'POST',
+		url: '__MODULE__/Party/getChangeParty',
+		dataType: 'json',
+		success: function(data){
+			html.push('<option value="">==选择镇街级组织==</option>');
+			for (var i = 0; i < data.length; i++) {
+				html.push('<option value="'+data[i].id+'">'+data[i].name+'</option>');
+			}
+			$('#changeP').empty().append(html.join(''));
+		},
+		error:function(data) {
+			alert('error');
+		},
+	});
+});
+</script>
+</body>
+</html>
