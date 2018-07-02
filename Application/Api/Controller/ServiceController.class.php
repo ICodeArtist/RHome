@@ -391,7 +391,7 @@ class ServiceController extends Controller {
 建党节内容更新！
 建党节内容更新！
 建党节内容更新！',
-      'lowest' => '2',	// 低于这个版本必须升级，为空或者高于这个版本不处理
+      'lowest' => '1',	// 低于这个版本必须升级，为空或者高于这个版本不处理
       'url' => 'http://122.237.102.36:8000/RHome/index.php/api/service/download'
 		);
 		$res[2] = array(
