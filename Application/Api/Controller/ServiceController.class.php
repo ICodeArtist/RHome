@@ -382,25 +382,39 @@ class ServiceController extends Controller {
 	*/
 	public function versions(){
 		$iDevice = I('iDevice');
-		$res[1] = array(
-			'id' => '1',
-			'version' => '2.1.3',
-      'info' => '为热烈庆祝中国共产党成立97周年，进一步增强党组织的凝聚力和战斗力，不断提高党员干部深入学习贯彻党的十九大精神的自觉性，“七一”系列庆祝党的生日。
-建党节内容更新！
-建党节内容更新！
-建党节内容更新！
-建党节内容更新！
-建党节内容更新！',
-      'lowest' => '1',	// 低于这个版本必须升级，为空或者高于这个版本不处理
-      'url' => 'http://122.237.102.36:8000/RHome/index.php/api/service/download'
-		);
-		$res[2] = array(
-			'id' => '1',
-      'version' => '13',
-      'info' => 'iOS',
-      'lowest' => '1',	// 低于这个版本必须升级，为空或者高于这个版本不处理
-      'url' => 'http://122.237.102.36:8000/RHome/index.php/api/service/download'
-		);
+		$Configs = D('Configs');
+		$config = $Configs->where('1=1')->select();
+// 		$res[1] = array(
+// 			'id' => '1',
+// 			'version' => '2.1.3',
+//       'info' => '为热烈庆祝中国共产党成立97周年，进一步增强党组织的凝聚力和战斗力，不断提高党员干部深入学习贯彻党的十九大精神的自觉性，“七一”系列庆祝党的生日。
+// 建党节内容更新！
+// 建党节内容更新！
+// 建党节内容更新！
+// 建党节内容更新！
+// 建党节内容更新！',
+//       'lowest' => '1',	// 低于这个版本必须升级，为空或者高于这个版本不处理
+//       'url' => 'http://122.237.102.36:8000/RHome/index.php/api/service/download'
+// 		);
+
+		// $res[2] = array(
+		// 	'id' => '1',
+    //   'version' => '13',
+    //   'info' => 'iOS',
+    //   'lowest' => '1',	// 低于这个版本必须升级，为空或者高于这个版本不处理
+    //   'url' => 'http://122.237.102.36:8000/RHome/index.php/api/service/download'
+		// );
+		$res[1]['id'] = '1';
+		$res[1]['version'] = $config[0]['value'];
+		$res[1]['info'] = $config[2]['value'];
+		$res[1]['lowest'] = $config[4]['value'];
+		$res[1]['url'] = 'http://122.237.102.36:8000/RHome/index.php/api/service/download';
+
+		$res[2]['id'] = '1';
+		$res[2]['version'] = $config[1]['value'];
+		$res[2]['info'] = $config[3]['value'];
+		$res[2]['lowest'] = $config[5]['value'];
+		$res[2]['url'] = 'http://122.237.102.36:8000/RHome/index.php/api/service/download';
 		ApiResult('200',$res[$iDevice],'');
 	}
 
@@ -411,7 +425,9 @@ class ServiceController extends Controller {
 			//header('Location: http://a.app.qq.com/o/simple.jsp?pkgname=com.hbersmember.main');
 		}else{
 			// header('Location: http://122.237.102.36:8000/redhome.apk');
-			header('Location: http://122.237.102.36:8000/hongseejia.apk');
+			$Configs = D('Configs');
+			$downurl = $Configs->where('id=7')->getField('value');
+			header('Location: http://122.237.102.36:8000/RHome/Public/'.$downurl);
 		}
 	}
 	/**

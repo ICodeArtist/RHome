@@ -167,4 +167,50 @@ class AdminController extends Controller {
     $data['code'] = '200';
     $this->ajaxReturn($data);
   }
+
+  /**
+  *版本
+  */
+  public function versions(){
+    $Configs = D('Configs');
+    $config = $Configs->where('1=1')->select();
+    $this->assign('config',$config);
+    $this->display('versions');
+  }
+  /**
+  *
+  */
+  public function EditConfig(){
+    $cid = $_POST['cid'];
+    $name = $_POST['name'];
+    $value = $_POST['value'];
+    $Configs = D('Configs');
+    $Configs->name = $name;
+    $Configs->value = $value;
+    $Configs->where('id='.$cid)->save();
+    $data['code'] = '200';
+    $this->ajaxReturn($data);
+  }
+  public function uploadApp(){
+    $rootPath = C('public_path');
+    $upload = new \Think\Upload();// 实例化上传类
+    $upload->maxSize = 0 ;// 设置附件上传大小
+    $upload->rootPath = $rootPath; // 设置附件上传根目录
+    $upload->savePath = 'app/'; // 设置附件上传（子）目录
+    // 上传单个文件
+    $info   =   $upload->uploadOne($_FILES['app']);
+    if(!$info) {// 上传错误提示错误信息
+      $data['code'] = '201';
+      $data['msg'] = $upload->getError();
+    }else{// 上传成功 获取上传文件信息
+      $data['code'] = '200';
+      $Configs = D('Configs');
+      $downurl = $Configs->where('id=7')->getField('value');
+      @unlink($rootPath.$downurl);
+      $Configs->value = $info['savepath'].$info['savename'];
+      $Configs->where('id=7')->save();
+      $data['msg'] = $info['savepath'].$info['savename'];
+    }
+    $this->ajaxReturn($data);
+  }
 }
