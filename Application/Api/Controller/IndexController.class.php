@@ -255,6 +255,7 @@ class IndexController extends Controller {
       $res['author'] = $ninfo['author'];
       $res['title'] = $ninfo['title'];
       $res['content'] = $ninfo['content'];
+      $res['contentUrl'] = APP_URL."/Public/api/share/detail.html?type=notice&id=".$nid;
       $res['addtime'] =date('Y-m-d H:i:s',$ninfo['addtime']);
       if($uid && is_numeric($uid) && $uid>0){
         $NR = $NoticeRead->where('noticeid='.$nid.' and uid='.$uid)->find();
