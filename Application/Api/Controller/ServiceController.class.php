@@ -10,7 +10,10 @@ class ServiceController extends Controller {
 
 		$mobile = I('mobile');
 		$iclass = I('iclass');
-
+		$smslog = D('Smslog');
+		$ttime = $smslog->where('tomobile="'.$mobile.'"')->order('time desc')->getField('time');
+		if((time()-$ttime)<60)
+			ApiResult('205','','请在一分钟之后再接收短信');
 		if($iclass == '0'){
 			if(IsAccountExist($mobile,'2')){
 	      ApiResult('202','','用户已存在');
