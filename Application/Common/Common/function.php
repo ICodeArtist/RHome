@@ -465,6 +465,7 @@ function UploadImageByMySelf($dname,$file){
     ResizeImage($im,$RESIZEWIDTH,$newname);
     ImageDestroy ($im);
   }
+  ossupload($thumbimage_url);
   return $thumbimage_url;
 }
 /*
@@ -550,6 +551,7 @@ function UploadImageFile($savePath){
   $upload->savePath  =     $savePath; // 设置附件上传（子）目录
   // 上传文件
   $info   =   $upload->upload();
+  ossupload($info['file']['savepath'].$info['file']['savename']);
   return $info;
 }
 /**
@@ -568,6 +570,7 @@ function UploadVideoFile($savePath){
   if(!$info) {// 上传错误提示错误信息
     return $upload->getError();
   }else{
+    ossupload($info['file']['savepath'].$info['file']['savename']);
     return $info;
   }
 }
@@ -826,5 +829,24 @@ function UploadVideoFile($savePath){
         ob_flush();
         flush();
         ob_end_clean();
+    }
+    function ossupload($file){
+    	$rootPath = dirname(THINK_PATH).'/Public';
+    	vendor('aliyunoss.autoload');
+    	$accessKeyId = "LTAIXljSxJ6HsklJ";//去阿里云后台获取秘钥
+    	$accessKeySecret = "H6OI9YJ18I4sEmNQ6JKWZTNNs5kp4c";//去阿里云后台获取秘钥
+    	$endpoint = "oss-cn-hangzhou.aliyuncs.com";//你的阿里云OSS地址
+    	$ossClient = new \OSS\OssClient($accessKeyId, $accessKeySecret, $endpoint);
+    	$bucket= "goodcreekvanguardbackup";//oss中的文件上传空间
+    	$savename = explode("/",$file);
+    	$object = $savename[4];//想要保存文件的名称
+    	try{
+    		$getOssInfo  = $ossClient->uploadFile($bucket,$object,$rootPath.$file);
+    		$getOssPdfUrl = $getOssInfo['info']['url'];
+    		// unlink($rootPath.$file);
+    		return str_replace("http","https",$getOssPdfUrl);
+    	}catch(OssException $e) {
+        // return false;
+      }
     }
 ?>
