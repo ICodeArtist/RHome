@@ -281,6 +281,8 @@ class ServiceController extends Controller {
 		if($re['code'] == 200){
 			$res['Token'] = $re['token'];
 			ApiResult('200',$res,'RC');
+		}else{
+			ApiResult('200',$re['code'],'');
 		}
 	}
 	/**

@@ -340,6 +340,11 @@ class MyController extends Controller {
       $Signin = D('Signin');
       $Point = D('Point');
       $Users = D('Users');
+      $ifexist = $Point->where('uid='.$uid)->count();
+      if($ifexist<1){
+        $Point->uid = $uid;
+        $Point->add();
+      }
       $ImageUrl = C('ImageUrl');
       $yesterday = strtotime(date('Y-m-d',time()-86400));
       $today = strtotime(date('Y-m-d',time()));
