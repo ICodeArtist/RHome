@@ -410,15 +410,15 @@ class ServiceController extends Controller {
     //   'url' => 'http://122.237.102.36:8000/RHome/index.php/api/service/download'
 		// );
 		$res[1]['id'] = '1';
-		$res[1]['version'] = $config[0]['value'];
-		$res[1]['info'] = $config[2]['value'];
-		$res[1]['lowest'] = $config[4]['value'];
+		$res[1]['version'] = $config[0]['value']?$config[0]['value']:"2.0.0";
+		$res[1]['info'] = $config[2]['value']?$config[2]['value']:"";
+		$res[1]['lowest'] = $config[4]['value']?$config[4]['value']:"1";
 		$res[1]['url'] = 'http://122.237.102.36:8000/RHome/index.php/api/service/download';
 
 		$res[2]['id'] = '1';
-		$res[2]['version'] = $config[1]['value'];
-		$res[2]['info'] = $config[3]['value'];
-		$res[2]['lowest'] = $config[5]['value'];
+		$res[2]['version'] = $config[1]['value']?$config[1]['value']:"2.0.0";
+		$res[2]['info'] = $config[3]['value']?$config[3]['value']:"";
+		$res[2]['lowest'] = $config[5]['value']?$config[5]['value']:"1";
 		$res[2]['url'] = 'http://122.237.102.36:8000/RHome/index.php/api/service/download';
 		ApiResult('200',$res[$iDevice],'');
 	}

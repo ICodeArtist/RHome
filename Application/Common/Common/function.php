@@ -837,7 +837,7 @@ function UploadVideoFile($savePath){
     	$accessKeySecret = "H6OI9YJ18I4sEmNQ6JKWZTNNs5kp4c";//去阿里云后台获取秘钥
     	$endpoint = "oss-cn-hangzhou.aliyuncs.com";//你的阿里云OSS地址
     	$ossClient = new \OSS\OssClient($accessKeyId, $accessKeySecret, $endpoint);
-    	$bucket= "goodcreekvanguardbackup";//oss中的文件上传空间
+    	$bucket= "hongseejia";//oss中的文件上传空间
     	$savename = explode("/",$file);
     	$object = $savename[4];//想要保存文件的名称
     	try{
